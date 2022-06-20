@@ -116,7 +116,7 @@ resource "aws_ecs_service" "fe-main-service" {
   network_configuration {
     security_groups  = [var.public_sg_id]
     subnets          = [var.public_subnet_id_a, var.public_subnet_id_b]
-    assign_public_ip = false
+    assign_public_ip = true
   }
 
   load_balancer {

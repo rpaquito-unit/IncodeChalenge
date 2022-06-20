@@ -16,6 +16,6 @@ COPY ./src .
 # update PATH environment variable
 ENV PATH=/root/.local:$PATH
 
-EXPOSE 5000
+EXPOSE 80
 
-CMD ["python3", "-m", "flask", "run", "--host=0.0.0.0"]
+CMD ["python3", "-m", "flask", "run", "--host=0.0.0.0", "--port=80"]

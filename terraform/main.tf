@@ -29,5 +29,9 @@ module "compute" {
   public_sg_id = module.network.public_sg_id
   public_lb_tg_id = module.network.public_lb_tg_id
   private_lb_dns = module.network.private_lb_dns
+  private_subnet_id_a = module.network.private_subnet_id_a
+  private_subnet_id_b = module.network.private_subnet_id_b
+  private_sg_id = module.network.private_sg_id
+  private_lb_tg_id = module.network.private_lb_tg_id
 }
 

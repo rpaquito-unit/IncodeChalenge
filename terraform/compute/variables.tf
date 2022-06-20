@@ -21,3 +21,19 @@ variable "public_lb_tg_id" {
 variable "private_lb_dns" {
   description = "The private loadbalancer dns"
 }
+
+variable "private_subnet_id_a" {
+  description = "The private subnet A id"
+}
+
+variable "private_subnet_id_b" {
+  description = "The private subnet B id"
+}
+
+variable "private_sg_id" {
+  description = "The private securitygroup id"
+}
+
+variable "private_lb_tg_id" {
+  description = "The private loadbalancer target group id"
+}

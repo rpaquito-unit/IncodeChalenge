@@ -1,16 +1,16 @@
 ######################################
 # Public Elastic Load Balancer
 ######################################
-resource "aws_lb" "public-elb" {
+resource "aws_lb" "public_elb" {
   name               = "${var.deploy_name}-public-elb"
   internal           = false
   load_balancer_type = "application"
-  security_groups    = [aws_security_group.public-sg.id]
-  subnets            = [aws_subnet.public-subnet-a.id,aws_subnet.public-subnet-b.id]
+  security_groups    = [aws_security_group.public_sg.id]
+  subnets            = [aws_subnet.public_subnet_a.id,aws_subnet.public_subnet_b.id]
 }
 
 # Public Elastic Load Balancer Target Group
-resource "aws_lb_target_group" "public-elb-tg" {
+resource "aws_lb_target_group" "public_elb_tg" {
   name     = "${var.deploy_name}-public-elb-tg"
   port     = 80
   protocol = "HTTP"
@@ -28,30 +28,30 @@ resource "aws_lb_target_group" "public-elb-tg" {
 }
 
 # Public Elastic Load Balancer Listner
-resource "aws_lb_listener" "public-elb-listner" {
-  load_balancer_arn = aws_lb.public-elb.arn
+resource "aws_lb_listener" "public_elb_listner" {
+  load_balancer_arn = aws_lb.public_elb.arn
   port              = "80"
   protocol          = "HTTP"
 
   default_action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.public-elb-tg.arn
+    target_group_arn = aws_lb_target_group.public_elb_tg.arn
   }
 }
 
 ######################################
 # Private Elastic Load Balancer
 ######################################
-resource "aws_lb" "private-elb" {
+resource "aws_lb" "private_elb" {
   name               = "${var.deploy_name}-private-elb"
   internal           = false
   load_balancer_type = "application"
-  security_groups    = [aws_security_group.private-sg.id]
-  subnets            = [aws_subnet.private-subnet-a.id,aws_subnet.private-subnet-b.id]
+  security_groups    = [aws_security_group.private_sg.id]
+  subnets            = [aws_subnet.private_subnet_a.id,aws_subnet.private_subnet_b.id]
 }
 
 # Private Elastic Load Balancer Target Group
-resource "aws_lb_target_group" "private-elb-tg" {
+resource "aws_lb_target_group" "private_elb_tg" {
   name     = "${var.deploy_name}-private-elb-tg"
   port     = 80
   protocol = "HTTP"
@@ -69,13 +69,13 @@ resource "aws_lb_target_group" "private-elb-tg" {
 }
 
 # Private Elastic Load Balancer Listner
-resource "aws_lb_listener" "private-elb-listner" {
-  load_balancer_arn = aws_lb.private-elb.arn
+resource "aws_lb_listener" "private_elb_listner" {
+  load_balancer_arn = aws_lb.private_elb.arn
   port              = "80"
   protocol          = "HTTP"
 
   default_action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.private-elb-tg.arn
+    target_group_arn = aws_lb_target_group.private_elb_tg.arn
   }
 }

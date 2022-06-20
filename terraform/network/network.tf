@@ -18,7 +18,7 @@ resource "aws_internet_gateway" "igw" {
 # PUBLIC
 ########################
 # Public Route Table
-resource "aws_route_table" "public-route-table" {
+resource "aws_route_table" "public_route_table" {
   vpc_id = aws_vpc.vpc.id
 
   route {
@@ -32,7 +32,7 @@ resource "aws_route_table" "public-route-table" {
 }
 
 # Public Subnet A
-resource "aws_subnet" "public-subnet-a" {
+resource "aws_subnet" "public_subnet_a" {
   vpc_id                  = aws_vpc.vpc.id
   cidr_block              = "10.0.1.0/24"
   map_public_ip_on_launch = true
@@ -44,13 +44,13 @@ resource "aws_subnet" "public-subnet-a" {
 }
 
 # Public Route Table Association A
-resource "aws_route_table_association" "public-route-table-association-a" {
-  subnet_id      = aws_subnet.public-subnet-a.id
-  route_table_id = aws_route_table.public-route-table.id
+resource "aws_route_table_association" "public_route_table_association_a" {
+  subnet_id      = aws_subnet.public_subnet_a.id
+  route_table_id = aws_route_table.public_route_table.id
 }
 
 # Public Subnet B
-resource "aws_subnet" "public-subnet-b" {
+resource "aws_subnet" "public_subnet_b" {
   vpc_id                  = aws_vpc.vpc.id
   cidr_block              = "10.0.2.0/24"
   map_public_ip_on_launch = true
@@ -62,16 +62,16 @@ resource "aws_subnet" "public-subnet-b" {
 }
 
 # Public Route Table Association B
-resource "aws_route_table_association" "public-route-table-association-b" {
-  subnet_id      = aws_subnet.public-subnet-b.id
-  route_table_id = aws_route_table.public-route-table.id
+resource "aws_route_table_association" "public_route_table_association_b" {
+  subnet_id      = aws_subnet.public_subnet_b.id
+  route_table_id = aws_route_table.public_route_table.id
 }
 
 ########################
 # PRIVATE
 ########################
 # Private Subnet A
-resource "aws_subnet" "private-subnet-a" {
+resource "aws_subnet" "private_subnet_a" {
   vpc_id                  = aws_vpc.vpc.id
   cidr_block              = "10.0.3.0/24"
   map_public_ip_on_launch = false
@@ -83,13 +83,13 @@ resource "aws_subnet" "private-subnet-a" {
 }
 
 # Private Route Table Association A 
-resource "aws_route_table_association" "private-route-table-association-a" {
-  subnet_id      = aws_subnet.private-subnet-a.id
-  route_table_id = aws_route_table.private-route-table-a.id
+resource "aws_route_table_association" "private_route_table_association_a" {
+  subnet_id      = aws_subnet.private_subnet_a.id
+  route_table_id = aws_route_table.private_route_table_a.id
 }
 
 # Private Subnet B
-resource "aws_subnet" "private-subnet-b" {
+resource "aws_subnet" "private_subnet_b" {
   vpc_id                  = aws_vpc.vpc.id
   cidr_block              = "10.0.4.0/24"
   map_public_ip_on_launch = false
@@ -101,19 +101,19 @@ resource "aws_subnet" "private-subnet-b" {
 }
 
 # Private Route Table Association B
-resource "aws_route_table_association" "private-route-table-association-b" {
-  subnet_id      = aws_subnet.private-subnet-b.id
-  route_table_id = aws_route_table.private-route-table-b.id
+resource "aws_route_table_association" "private_route_table_association_b" {
+  subnet_id      = aws_subnet.private_subnet_b.id
+  route_table_id = aws_route_table.private_route_table_b.id
 }
 
 
 # Private Route Table A
-resource "aws_route_table" "private-route-table-a" {
+resource "aws_route_table" "private_route_table_a" {
   vpc_id = aws_vpc.vpc.id
 
   route {
     cidr_block     = "0.0.0.0/0"
-    nat_gateway_id = aws_nat_gateway.nat-gateway-a.id
+    nat_gateway_id = aws_nat_gateway.nat_gateway_a.id
   }
 
   tags = {
@@ -122,12 +122,12 @@ resource "aws_route_table" "private-route-table-a" {
 }
 
 # Private Route Table B
-resource "aws_route_table" "private-route-table-b" {
+resource "aws_route_table" "private_route_table_b" {
   vpc_id = aws_vpc.vpc.id
 
   route {
     cidr_block     = "0.0.0.0/0"
-    nat_gateway_id = aws_nat_gateway.nat-gateway-b.id
+    nat_gateway_id = aws_nat_gateway.nat_gateway_b.id
   }
 
   tags = {
@@ -136,25 +136,25 @@ resource "aws_route_table" "private-route-table-b" {
 }
 
 # NAT Gateway A
-resource "aws_nat_gateway" "nat-gateway-a" {
-  allocation_id = aws_eip.private-nat-eip-a.allocation_id
-  subnet_id     = aws_subnet.private-subnet-a.id
+resource "aws_nat_gateway" "nat_gateway_a" {
+  allocation_id = aws_eip.private_nat_eip_a.allocation_id
+  subnet_id     = aws_subnet.private_subnet_a.id
   depends_on    = [aws_internet_gateway.igw]
 }
 
 # NAT Gateway B
-resource "aws_nat_gateway" "nat-gateway-b" {
-  allocation_id = aws_eip.private-nat-eip-b.allocation_id
-  subnet_id     = aws_subnet.private-subnet-b.id
+resource "aws_nat_gateway" "nat_gateway_b" {
+  allocation_id = aws_eip.private_nat_eip_b.allocation_id
+  subnet_id     = aws_subnet.private_subnet_b.id
   depends_on    = [aws_internet_gateway.igw]
 }
 
 # Elastic IP
-resource "aws_eip" "private-nat-eip-a" {
+resource "aws_eip" "private_nat_eip_a" {
   vpc = true
 }
 
-resource "aws_eip" "private-nat-eip-b" {
+resource "aws_eip" "private_nat_eip_b" {
   vpc = true
 }
 
@@ -162,24 +162,24 @@ resource "aws_eip" "private-nat-eip-b" {
 # DATABASE
 ########################
 # Database Subnet A
-resource "aws_subnet" "db-subnet-a" {
+resource "aws_subnet" "db_subnet_a" {
   vpc_id            = aws_vpc.vpc.id
   cidr_block        = "10.0.5.0/24"
   availability_zone = "us-east-1a"
 
   tags = {
-    Name = "${var.deploy_name}-DB-subnet-A"
+    Name = "${var.deploy_name}-db-subnet-a"
   }
 }
  
 # Database Subnet B
-resource "aws_subnet" "db-subnet-b" {
+resource "aws_subnet" "db_subnet_b" {
   vpc_id            = aws_vpc.vpc.id
   cidr_block        = "10.0.6.0/24"
   availability_zone = "us-east-1b"
 
   tags = {
-    Name = "${var.deploy_name}-DB-subnet-B"
+    Name = "${var.deploy_name}-db-subnet-b"
   }
 }
 

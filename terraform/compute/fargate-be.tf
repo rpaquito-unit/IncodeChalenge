@@ -1,19 +1,19 @@
-resource "aws_ecs_cluster" "fe_main_cluster" {
-  name = "${var.deploy_name}-fe-cluster"
+resource "aws_ecs_cluster" "be_main_cluster" {
+  name = "${var.deploy_name}-be-cluster"
 }
 
-resource "aws_ecs_task_definition" "fe_main_taskdefinition" {
-  family                   = "${var.deploy_name}-fe-task-family"
+resource "aws_ecs_task_definition" "be_main_taskdefinition" {
+  family                   = "${var.deploy_name}-be-task-family"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
   cpu                      = 256
   memory                   = 512
-  execution_role_arn       = aws_iam_role.ecs_task_execution_role_fe.arn
-  task_role_arn            = aws_iam_role.ecs_task_role_fe.arn
+  execution_role_arn       = aws_iam_role.ecs_task_execution_role_be.arn
+  task_role_arn            = aws_iam_role.ecs_task_role_be.arn
   container_definitions = jsonencode([
     {
-      name      = "${var.deploy_name}_fe_container"
-      image     = "887766911020.dkr.ecr.us-east-1.amazonaws.com/webapp:latest"
+      name      = "${var.deploy_name}_be_container"
+      image     = "887766911020.dkr.ecr.us-east-1.amazonaws.com/backend:latest"
       cpu       = 256
       memory    = 512
       essential = true
@@ -23,17 +23,11 @@ resource "aws_ecs_task_definition" "fe_main_taskdefinition" {
           hostPort      = 80
         }
       ]
-      environment = [
-        {
-          name = "backendDns"
-          value = var.private_lb_dns
-        }
-      ]
     }
   ])
 }
 
-resource "aws_iam_role" "ecs_task_execution_role_fe" {
+resource "aws_iam_role" "ecs_task_execution_role_be" {
   name = "${var.deploy_name}-ecsTaskExecutionRole"
 
   assume_role_policy = <<EOF
@@ -53,12 +47,12 @@ resource "aws_iam_role" "ecs_task_execution_role_fe" {
 EOF
 }
 
-resource "aws_iam_role_policy_attachment" "ecs_task_execution_role_fe_policy_attachment" {
-  role       = aws_iam_role.ecs_task_execution_role_fe.name
+resource "aws_iam_role_policy_attachment" "ecs_task_execution_role_be_policy_attachment" {
+  role       = aws_iam_role.ecs_task_execution_role_be.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
 
-resource "aws_iam_role" "ecs_task_role_fe" {
+resource "aws_iam_role" "ecs_task_role_be" {
   name = "${var.deploy_name}-ecsTaskRole"
 
   assume_role_policy = <<EOF
@@ -78,7 +72,7 @@ resource "aws_iam_role" "ecs_task_role_fe" {
 EOF
 }
 
-resource "aws_iam_policy" "ecs_task_role_fe_policy" {
+resource "aws_iam_policy" "ecs_task_role_be_policy" {
   name        = "${var.deploy_name}-ecsTaskRole-policy"
   description = "Policy that allows access to AWS things"
 
@@ -89,7 +83,7 @@ resource "aws_iam_policy" "ecs_task_role_fe_policy" {
        {
            "Effect": "Allow",
            "Action": [
-               "dynamodb:*"
+               "rds:*"
            ],
            "Resource": "*"
        }
@@ -98,15 +92,15 @@ resource "aws_iam_policy" "ecs_task_role_fe_policy" {
 EOF
 }
  
-resource "aws_iam_role_policy_attachment" "ecs_task_role_fe_policy_attachment" {
-  role       = aws_iam_role.ecs_task_role_fe.name
-  policy_arn = aws_iam_policy.ecs_task_role_fe_policy.arn
+resource "aws_iam_role_policy_attachment" "ecs_task_role_be_policy_attachment" {
+  role       = aws_iam_role.ecs_task_role_be.name
+  policy_arn = aws_iam_policy.ecs_task_role_be_policy.arn
 }
 
-resource "aws_ecs_service" "fe_main_service" {
-  name                               = "${var.deploy_name}-fe-service"
-  cluster                            = aws_ecs_cluster.fe_main_cluster.id
-  task_definition                    = aws_ecs_task_definition.fe_main_taskdefinition.id
+resource "aws_ecs_service" "be_main_service" {
+  name                               = "${var.deploy_name}-be-service"
+  cluster                            = aws_ecs_cluster.be_main_cluster.id
+  task_definition                    = aws_ecs_task_definition.be_main_taskdefinition.id
   desired_count                      = 2
   deployment_minimum_healthy_percent = 50
   deployment_maximum_percent         = 200
@@ -114,14 +108,14 @@ resource "aws_ecs_service" "fe_main_service" {
   scheduling_strategy                = "REPLICA"
 
   network_configuration {
-    security_groups  = [var.public_sg_id]
-    subnets          = [var.public_subnet_id_a, var.public_subnet_id_b]
+    security_groups  = [var.private_sg_id]
+    subnets          = [var.private_subnet_id_a, var.private_subnet_id_b]
     assign_public_ip = true
   }
 
   load_balancer {
-    target_group_arn = var.public_lb_tg_id
-    container_name   = "${var.deploy_name}-fe-container"
+    target_group_arn = var.private_lb_tg_id
+    container_name   = "${var.deploy_name}-be-container"
     container_port   = "80"
   }
 

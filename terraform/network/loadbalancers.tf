@@ -22,7 +22,7 @@ resource "aws_lb_target_group" "public_elb_tg" {
 #    protocol            = "HTTP"
 #    matcher             = "200"
 #    timeout             = "3"
-#    path                = var.health_check_path
+#    path                = "/hello"
 #    unhealthy_threshold = "2"
 #  }
 }
@@ -44,7 +44,7 @@ resource "aws_lb_listener" "public_elb_listner" {
 ######################################
 resource "aws_lb" "private_elb" {
   name               = "${var.deploy_name}-private-elb"
-  internal           = false
+  internal           = true
   load_balancer_type = "application"
   security_groups    = [aws_security_group.private_sg.id]
   subnets            = [aws_subnet.private_subnet_a.id,aws_subnet.private_subnet_b.id]

@@ -15,7 +15,7 @@ def index():
     if os.getenv('backendDns') is not None:
         backendURL = os.environ['backendDns']
     else:
-        backendURL = "localhost:5001"
+        backendURL = "localhost:8081"
 
     links = {"http://"+backendURL+"/api/name" : 'Get Names', "http://"+backendURL+"/api/city": 'Get Cities'}
     returnVal = ""

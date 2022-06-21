@@ -29,6 +29,14 @@ resource "aws_ecs_task_definition" "fe_main_taskdefinition" {
           value = var.private_lb_dns
         }
       ]
+      logConfiguration = {
+        logDriver: "awslogs"
+        options = {
+          awslogs-group: "/ecs/fe-app",
+          awslogs-region: "us-east-1",
+          awslogs-stream-prefix: "fe-fargate"
+        }
+      }  
     }
   ])
 }

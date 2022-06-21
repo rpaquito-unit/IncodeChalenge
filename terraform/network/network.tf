@@ -138,14 +138,14 @@ resource "aws_route_table" "private_route_table_b" {
 # NAT Gateway A
 resource "aws_nat_gateway" "nat_gateway_a" {
   allocation_id = aws_eip.private_nat_eip_a.allocation_id
-  subnet_id     = aws_subnet.private_subnet_a.id
+  subnet_id     = aws_subnet.public_subnet_a.id
   depends_on    = [aws_internet_gateway.igw]
 }
 
 # NAT Gateway B
 resource "aws_nat_gateway" "nat_gateway_b" {
   allocation_id = aws_eip.private_nat_eip_b.allocation_id
-  subnet_id     = aws_subnet.private_subnet_b.id
+  subnet_id     = aws_subnet.public_subnet_b.id
   depends_on    = [aws_internet_gateway.igw]
 }
 

@@ -3,7 +3,7 @@ resource "aws_ecs_cluster" "be_main_cluster" {
 }
 
 resource "aws_ecs_task_definition" "be_main_taskdefinition" {
-  family                   = "${var.deploy_name}-be-task-family"
+  family                   = "${var.deploy_name}-task-family-be"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
   cpu                      = 256
@@ -23,6 +23,14 @@ resource "aws_ecs_task_definition" "be_main_taskdefinition" {
           hostPort      = 80
         }
       ]
+      logConfiguration = {
+        logDriver: "awslogs"
+        options = {
+          awslogs-group: "/ecs/be-app",
+          awslogs-region: "us-east-1",
+          awslogs-stream-prefix: "be-fargate"
+        }
+      }      
     }
   ])
 }

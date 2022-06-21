@@ -12,7 +12,7 @@ resource "aws_ecs_task_definition" "be_main_taskdefinition" {
   task_role_arn            = aws_iam_role.ecs_task_role_be.arn
   container_definitions = jsonencode([
     {
-      name      = "${var.deploy_name}_be_container"
+      name      = "${var.deploy_name}-container-be"
       image     = "887766911020.dkr.ecr.us-east-1.amazonaws.com/backend:latest"
       cpu       = 256
       memory    = 512
@@ -28,7 +28,7 @@ resource "aws_ecs_task_definition" "be_main_taskdefinition" {
 }
 
 resource "aws_iam_role" "ecs_task_execution_role_be" {
-  name = "${var.deploy_name}-ecsTaskExecutionRole"
+  name = "${var.deploy_name}-ecsTaskExecutionRole-be"
 
   assume_role_policy = <<EOF
 {
@@ -53,7 +53,7 @@ resource "aws_iam_role_policy_attachment" "ecs_task_execution_role_be_policy_att
 }
 
 resource "aws_iam_role" "ecs_task_role_be" {
-  name = "${var.deploy_name}-ecsTaskRole"
+  name = "${var.deploy_name}-ecsTaskRole-be"
 
   assume_role_policy = <<EOF
 {
@@ -73,7 +73,7 @@ EOF
 }
 
 resource "aws_iam_policy" "ecs_task_role_be_policy" {
-  name        = "${var.deploy_name}-ecsTaskRole-policy"
+  name        = "${var.deploy_name}-ecsTaskRole-policy-be"
   description = "Policy that allows access to AWS things"
 
   policy = <<EOF
@@ -98,7 +98,7 @@ resource "aws_iam_role_policy_attachment" "ecs_task_role_be_policy_attachment" {
 }
 
 resource "aws_ecs_service" "be_main_service" {
-  name                               = "${var.deploy_name}-be-service"
+  name                               = "${var.deploy_name}-service-be"
   cluster                            = aws_ecs_cluster.be_main_cluster.id
   task_definition                    = aws_ecs_task_definition.be_main_taskdefinition.id
   desired_count                      = 2
@@ -115,7 +115,7 @@ resource "aws_ecs_service" "be_main_service" {
 
   load_balancer {
     target_group_arn = var.private_lb_tg_id
-    container_name   = "${var.deploy_name}-be-container"
+    container_name   = "${var.deploy_name}-container-be"
     container_port   = "80"
   }
 

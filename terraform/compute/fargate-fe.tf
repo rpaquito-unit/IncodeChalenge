@@ -3,7 +3,7 @@ resource "aws_ecs_cluster" "fe_main_cluster" {
 }
 
 resource "aws_ecs_task_definition" "fe_main_taskdefinition" {
-  family                   = "${var.deploy_name}-fe-task-family"
+  family                   = "${var.deploy_name}-task-family-fe"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
   cpu                      = 256
@@ -12,7 +12,7 @@ resource "aws_ecs_task_definition" "fe_main_taskdefinition" {
   task_role_arn            = aws_iam_role.ecs_task_role_fe.arn
   container_definitions = jsonencode([
     {
-      name      = "${var.deploy_name}_fe_container"
+      name      = "${var.deploy_name}-container-fe"
       image     = "887766911020.dkr.ecr.us-east-1.amazonaws.com/webapp:latest"
       cpu       = 256
       memory    = 512
@@ -34,7 +34,7 @@ resource "aws_ecs_task_definition" "fe_main_taskdefinition" {
 }
 
 resource "aws_iam_role" "ecs_task_execution_role_fe" {
-  name = "${var.deploy_name}-ecsTaskExecutionRole"
+  name = "${var.deploy_name}-ecsTaskExecutionRole-fe"
 
   assume_role_policy = <<EOF
 {
@@ -59,7 +59,7 @@ resource "aws_iam_role_policy_attachment" "ecs_task_execution_role_fe_policy_att
 }
 
 resource "aws_iam_role" "ecs_task_role_fe" {
-  name = "${var.deploy_name}-ecsTaskRole"
+  name = "${var.deploy_name}-ecsTaskRole-fe"
 
   assume_role_policy = <<EOF
 {
@@ -79,7 +79,7 @@ EOF
 }
 
 resource "aws_iam_policy" "ecs_task_role_fe_policy" {
-  name        = "${var.deploy_name}-ecsTaskRole-policy"
+  name        = "${var.deploy_name}-ecsTaskRole-policy-fe"
   description = "Policy that allows access to AWS things"
 
   policy = <<EOF
@@ -104,7 +104,7 @@ resource "aws_iam_role_policy_attachment" "ecs_task_role_fe_policy_attachment" {
 }
 
 resource "aws_ecs_service" "fe_main_service" {
-  name                               = "${var.deploy_name}-fe-service"
+  name                               = "${var.deploy_name}-service-fe"
   cluster                            = aws_ecs_cluster.fe_main_cluster.id
   task_definition                    = aws_ecs_task_definition.fe_main_taskdefinition.id
   desired_count                      = 2
@@ -121,7 +121,7 @@ resource "aws_ecs_service" "fe_main_service" {
 
   load_balancer {
     target_group_arn = var.public_lb_tg_id
-    container_name   = "${var.deploy_name}-fe-container"
+    container_name   = "${var.deploy_name}-container-fe"
     container_port   = "80"
   }
 

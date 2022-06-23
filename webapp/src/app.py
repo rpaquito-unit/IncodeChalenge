@@ -11,13 +11,7 @@ def hello():
 
 @app.route("/")
 def index():
-
-    if os.getenv('backendDns') is not None:
-        backendURL = os.environ['backendDns']
-    else:
-        backendURL = "localhost:8081"
-
-    links = {"http://"+backendURL+"/api/name" : 'Get Names', "http://"+backendURL+"/api/city": 'Get Cities'}
+    links = {"http://"+get_backend_url()+"/api/name" : 'Get Names', "http://"+get_backend_url()+"/api/city": 'Get Cities'}
     returnVal = ""
 
     for link in links:
@@ -27,26 +21,37 @@ def index():
 
 @app.route("/names")
 def names():
-
-    if os.getenv('backendDns') is not None:
-        backendURL = os.environ['backendDns']
-    else:
-        backendURL = "localhost:8081"
-
-    api_url = "http://"+backendURL+"/api/name"    
+    api_url = "http://"+get_backend_url()+"/api/name"    
     response = requests.get(api_url, timeout=10)
  
     return response.content
 
 @app.route("/cities")
 def cities():
+    api_url = "http://"+get_backend_url()+"/api/city"    
+    response = requests.get(api_url, timeout=10)
+ 
+    return response.content
 
+@app.route("/env")
+def env():
+    api_url = "http://"+get_backend_url()+"/api/env"
+    response = requests.get(api_url, timeout=10)
+ 
+    return response.content
+
+@app.route("/testdb")
+def testdb():
+    api_url = "http://"+get_backend_url()+"/api/testdb"
+    response = requests.get(api_url, timeout=10)
+ 
+    return response.content    
+
+
+def get_backend_url():
     if os.getenv('backendDns') is not None:
         backendURL = os.environ['backendDns']
     else:
         backendURL = "localhost:8081"
 
-    api_url = "http://"+backendURL+"/api/city"    
-    response = requests.get(api_url, timeout=10)
- 
-    return response.content
+    return backendURL

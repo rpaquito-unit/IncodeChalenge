@@ -14,12 +14,10 @@ provider "aws" {
   secret_key  = var.aws_secret_key
 }
 
-
 module "network" {
   source        = "./network"
   deploy_name   = var.deploy_name
 }
-
 
 module "compute" {
   source        = "./compute"
@@ -33,5 +31,18 @@ module "compute" {
   private_subnet_id_b = module.network.private_subnet_id_b
   private_sg_id = module.network.private_sg_id
   private_lb_tg_id = module.network.private_lb_tg_id
+  db_username = var.db_username
+  db_password = var.db_password
+  db_endpoint = module.rds.mysql_endpoint
+}
+
+module "rds" {
+  source        = "./rds"
+  deploy_name   = var.deploy_name
+  db_subnet_id_a = module.network.db_subnet_a
+  db_subnet_id_b = module.network.db_subnet_b
+  db_securitygroup_id = module.network.db_sg_id
+  db_username = var.db_username
+  db_password = var.db_password
 }
 

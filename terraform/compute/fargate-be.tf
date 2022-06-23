@@ -23,6 +23,20 @@ resource "aws_ecs_task_definition" "be_main_taskdefinition" {
           hostPort      = 80
         }
       ]
+      environment = [
+        {
+          name = "db_username"
+          value = var.db_username
+        },
+        {
+          name = "db_password"
+          value = var.db_password
+        },
+        {
+          name = "db_endpoint"
+          value = var.db_endpoint
+        }
+      ]      
       logConfiguration = {
         logDriver: "awslogs"
         options = {

@@ -9,3 +9,11 @@ variable "deploy_name" {
 variable "aws_region" {
   description = "AWS Region"
 }
+
+variable "db_username" {
+  description = "Database Username"
+}
+
+variable "db_password" {
+  description = "Database Password"
+}

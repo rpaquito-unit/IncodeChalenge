@@ -37,3 +37,15 @@ variable "private_sg_id" {
 variable "private_lb_tg_id" {
   description = "The private loadbalancer target group id"
 }
+
+variable "db_username" {
+  description = "The database username"
+}
+
+variable "db_password" {
+  description = "The database password"
+}
+
+variable "db_endpoint" {
+  description = "The database endpoint"
+}

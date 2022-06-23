@@ -47,3 +47,18 @@ output "private_lb_dns" {
   description = "The Private Elastic Load Balancer DNS"
   value = "${aws_lb.private_elb.dns_name}"
 }
+
+output "db_subnet_a" {
+  description = "The DB Subnet A ID"
+  value = "${aws_subnet.db_subnet_a.id}"
+}
+
+output "db_subnet_b" {
+  description = "The DB Subnet B ID"
+  value = "${aws_subnet.db_subnet_b.id}"
+}
+
+output "db_sg_id" {
+  description = "The DB Security Group ID"
+  value = "${aws_security_group.database_sg.id}"
+}

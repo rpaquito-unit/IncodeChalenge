@@ -61,7 +61,13 @@ def get_testdb():
 
     try:
         print("Connecting to "+db_ep)
-        db = pymysql.connect(db_ep,db_user,db_pass)
+        #db = pymysql.connect(db_ep,db_user,db_pass)
+        db = pymysql.connect(host=db_ep,
+                             user=db_user,
+                             password=db_pass,
+                             database='db',
+                             charset='utf8mb4',
+                             cursorclass=pymysql.cursors.DictCursor)
         print("Connection successful to "+db_ep)
         returnTxt = "Connected"
     except Exception as e:

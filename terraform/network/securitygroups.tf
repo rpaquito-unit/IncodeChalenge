@@ -32,7 +32,7 @@ resource "aws_security_group" "public_sg" {
   }
 }
 
-# Create Web Server Security Group
+# Create Backend Server Security Group
 resource "aws_security_group" "private_sg" {
   name        = "${var.deploy_name}-private-sg"
   description = "Allow inbound traffic from ALB"

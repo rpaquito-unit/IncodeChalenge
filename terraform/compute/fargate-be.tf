@@ -96,7 +96,7 @@ EOF
 
 resource "aws_iam_policy" "ecs_task_role_be_policy" {
   name        = "${var.deploy_name}-ecsTaskRole-policy-be"
-  description = "Policy that allows access to AWS things"
+  description = "Policy that allows access to AWS rds"
 
   policy = <<EOF
 {

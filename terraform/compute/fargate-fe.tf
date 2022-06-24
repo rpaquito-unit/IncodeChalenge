@@ -88,16 +88,16 @@ EOF
 
 resource "aws_iam_policy" "ecs_task_role_fe_policy" {
   name        = "${var.deploy_name}-ecsTaskRole-policy-fe"
-  description = "Policy that allows access to AWS things"
+  description = "Policy that deny access to AWS"
 
   policy = <<EOF
 {
    "Version": "2012-10-17",
    "Statement": [
        {
-           "Effect": "Allow",
+           "Effect": "Deny",
            "Action": [
-               "dynamodb:*"
+               "*"
            ],
            "Resource": "*"
        }

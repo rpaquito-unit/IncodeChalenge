@@ -13,6 +13,6 @@ resource "aws_db_instance" "mysql" {
 }
 
 resource "aws_db_subnet_group" "rds-default" {
-  name       = "main"
+  name       = "rds-main-db_subnet_group"
   subnet_ids = [var.db_subnet_id_a, var.db_subnet_id_b]
 }

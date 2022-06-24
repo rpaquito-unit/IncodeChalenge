@@ -1,6 +1,8 @@
 import pymysql
 from flask import Flask
 import os
+import sys
+
 
 app = Flask(__name__)
 
@@ -60,9 +62,11 @@ def get_testdb():
     try:
         print("Connecting to "+db_ep)
         db = pymysql.connect(db_ep,db_user,db_pass)
-        print ("Connection successful to "+db_ep)
+        print("Connection successful to "+db_ep)
         returnTxt = "Connected"
     except Exception as e:
-        print ("Connection unsuccessful due to "+str(e))
+        print("Connection unsuccessful due to "+str(e))
+        print("Connection unsuccessful due to "+str(e), file = sys.stderr)
+        returnTxt+=" "+str(e)
 
     return returnTxt

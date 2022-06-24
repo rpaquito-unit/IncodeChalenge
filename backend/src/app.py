@@ -65,7 +65,7 @@ def get_testdb():
         db = pymysql.connect(host=db_ep,
                              user=db_user,
                              password=db_pass,
-                             database='db',
+                             database='mysqldb',
                              charset='utf8mb4',
                              cursorclass=pymysql.cursors.DictCursor)
         print("Connection successful to "+db_ep)
